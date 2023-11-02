@@ -29,7 +29,8 @@
     <!-- 공통모듈 JS -->
     <script type="module" src="./js/common.js"></script>
     <script type="module" src="./js/login.js"></script>
-    <script type="module" src="./js/linksys.js"></script>
+    <!-- 링크시스템 JS -->
+    <script src="./js/linksys.js"></script>
   </head>
   <body>
     <!-- 1.상단영역 -->

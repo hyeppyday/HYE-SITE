@@ -18,19 +18,18 @@ const chkEach = $(".chk");
 
 // 2. 체크박스 변경 이벤트 함수 만들기
 chkAll.change(function () {
-    // (1) 체크박스 체크여부 확인하기
-    let isChk = $(this).prop('checked');
-    // console.log("체크됐니",isChk);
+  // (1) 체크박스 체크여부 확인하기
+  let isChk = $(this).prop("checked");
+  // console.log("체크됐니",isChk);
 
-    // (2) 젠처 체크박스가 체크상태(true)이면
-    // 개별체크박스도 모두 true로 체크상태 변경
-    // 미체크 상태시(false) 개별박스도 모두 false로 변경
-    chkEach.prop('checked',isChk);
-    // chkEach.attr('checked',isChk);
-    // for 문 없이도 여러개의 체크박스를
-    // 동시에 변경할 수 있음 attr()도 동일하게 변경가능
-    // 읽어오는 것만 안됨!!
-    
+  // (2) 젠처 체크박스가 체크상태(true)이면
+  // 개별체크박스도 모두 true로 체크상태 변경
+  // 미체크 상태시(false) 개별박스도 모두 false로 변경
+  chkEach.prop("checked", isChk);
+  // chkEach.attr('checked',isChk);
+  // for 문 없이도 여러개의 체크박스를
+  // 동시에 변경할 수 있음 attr()도 동일하게 변경가능
+  // 읽어오는 것만 안됨!!
 }); ///////////// change ///////////////
 
 /********************************************** 
@@ -38,46 +37,49 @@ chkAll.change(function () {
 **********************************************/
 // 원리 : 개별 체크박스가 모두 체크되면 전체 체크하기
 // 대상 : .chk -> chkEach변수
-chkEach.change(function(){
-    // 1. 체크 개수 알아오기 : length -> 개수리턴
-    let num = $('.chk:checked').length;
-    // console.log(num)
-    // 2. 체크개수가 3이면 전체 체크박스 체크하기
-    if(num == 3){
-        chkAll.prop('checked',true)
-    }
-    else{
-        chkAll.prop('checked',false)
-    }
-}) ///////////////// change //////////////////
+chkEach.change(function () {
+  // 1. 체크 개수 알아오기 : length -> 개수리턴
+  let num = $(".chk:checked").length;
+  // console.log(num)
+  // 2. 체크개수가 3이면 전체 체크박스 체크하기
+  if (num == 3) {
+    chkAll.prop("checked", true);
+  } else {
+    chkAll.prop("checked", false);
+  }
+}); ///////////////// change //////////////////
 
 /********************************************** 
     동의/비동의 버튼 클릭시 처리하기
 **********************************************/
 // 대상 : .YNbox button
 // 통과 조건 : #termsService 와 #termsPrivacy 체크박스가 모두 체크되면 통과!
-$('.YNbox button').click(function(){
-    // 1. 버튼 구분하기 : is 동의 button? - is('#btnY')
-    let isBtn = $(this).is('#btnY');
-    console.log('동의냐?',isBtn)
-    // 2. 동의 버튼일 경우 : 필수체크 확인후 회원가입 허가!
-    if(isBtn){
-        if($('#termsService').prop('checked') && $('#termsPrivacy').prop('checked')){
-            // alert('통과')
-            // 동의/비동의박스 스~윽 사라지기
-            $('#conf').fadeOut(300,()=>{
-                // 사라진후 회원가입박스 스~윽 나타나기
-                $('.scont').fadeIn(300);
-            })///////// fadeOut ///////////
-        }
-        else{ alert('모든 필수항목에 체크해주세요.')}
-    } /////////// if /////////////
-    // 3. 비동의 버튼 클릭시
-    else{
-        alert('비동의 하였으므로 메인페이지로 이동합니다.')
-        location.href = 'index.php'
-    }////////////// else /////////////
-}) /////////// click /////////////
+$(".YNbox button").click(function () {
+  // 1. 버튼 구분하기 : is 동의 button? - is('#btnY')
+  let isBtn = $(this).is("#btnY");
+  console.log("동의냐?", isBtn);
+  // 2. 동의 버튼일 경우 : 필수체크 확인후 회원가입 허가!
+  if (isBtn) {
+    if (
+      $("#termsService").prop("checked") &&
+      $("#termsPrivacy").prop("checked")
+    ) {
+      // alert('통과')
+      // 동의/비동의박스 스~윽 사라지기
+      $("#conf").fadeOut(300, () => {
+        // 사라진후 회원가입박스 스~윽 나타나기
+        $(".scont").fadeIn(300);
+      }); ///////// fadeOut ///////////
+    } else {
+      alert("모든 필수항목에 체크해주세요.");
+    }
+  } /////////// if /////////////
+  // 3. 비동의 버튼 클릭시
+  else {
+    alert("비동의 하였으므로 메인페이지로 이동합니다.");
+    location.href = "index.php";
+  } ////////////// else /////////////
+}); /////////// click /////////////
 
 /* 
     [ 속성값을 읽어오는 메서드 2가지 ]
@@ -155,12 +157,80 @@ $(`form.logF input[type=text][id!=email2],
       } ///////////////// if : 메시지 뿌리기 ////////////////
       else {
         // 통과시
+
+        /************************************************** 
+          [ Ajax로 중복아이디 검사하기 ]
+          ajax 처리 유형 2가지
+          
+          1) post 방식 처리 메서드
+          - $.post(URL,data,callback)
+
+          2) get 방식 처리 메서드
+          - $.get(URL,callback)
+          -> get방식은 URL로 키=값 형식으로 데이터 전송함!
+
+          3) 위 두가지 유형 중 처리선택 메서드
+          - $.ajax({
+            전송할페이지,
+            전송방식,
+            보낼데이터,
+            전송할데이터타입,
+            비동기옵션,
+            성공처리,
+            실패처리
+          })
+          -> 보내는 값은 하나(객체데이터)
+          -> 객체안에 7가지 유형의 데이터를 보냄!
+        **************************************************/
+
+        -$.ajax({
+          // 1. 전송할페이지
+          url: "./process/chkID.php",
+          //2. 전송방식(type)
+          type: "post",
+          // 3. 보낼데이터(data) -객체형식
+          data: { mid: $("#mid").val() },
+          // 4. 전송할데이터타입(dataType)
+          dataType: "html",
+          // 5. 비동기옵션
+          // -> 비동기옵션은 본처리를
+          // 비동기적으로 처리하겠다는 것임(기본값 true)
+          // false로 해야 동기화 처리되어
+          // 불통과시 pass=false가 처리됨
+          // (비동기적으로 하면 따로따로 처리되려고해서 pass=false가 처리안됨)
+          async: false,
+          // 6. 성공처리(success)
+          success: function (res) {
+            // res - 리턴된 결과값
+            if (res == "ok") {
+              $("#mid").siblings(".msg").text("멋진아이디네요!").addClass("on");
+            } ///// if /////
+            // 아이디가 중복일 경우//
+            else {
+              $("#mid")
+                .siblings(".msg")
+                .text("이미 사용중인 아이디입니다!")
+                .removeClass("on");
+                // '가입하기'불통과시 pass값 변경 추가
+                pass = false;
+                console.log('중복ID:',pass)
+            }
+          },
+          // 7. 실패처리(error)
+          // xhr - XMLHttpRequest객체
+          error:function(xhr,status,error){
+            alert('연결처리실패:'+error);
+
+          }////// error //////
+        }); ///////////// ajax 메서드 /////////////////
+
+        // 통과시
         // 1. DB에 조회하여 같은 아이디가 있다면
         // '이미사용중인 아이디입니다' 와 같은 메시지 출력
         // 2. 만약 DB조회하여 같은 아이디가 없으면
         // '멋진아이디네요!' 메시지 출력
         // 여기서 우선은 DB조회가 안되므로 통과시 메시지로 출력
-        $(this).siblings(".msg").text("멋진아이디네요!").addClass("on");
+        //
         // -> 비동기 통신 Ajax로 서버쪽에 아이디 중복검사 필요!
       }
     } ////////////////// else if : 아이디검사 ////////////////////
@@ -407,7 +477,7 @@ $("#btnj").click((e) => {
   console.log("통과여부:", pass);
 
   // (4) 검사결과에 따라 메시지 보이기
-  if(pass){
+  if (pass) {
     // 오리지널 포스트 방식으로 전송함!
     // $('.logF').submit();
     // 현재 페이지 form정보가 모두 inc/ins.php로
@@ -433,45 +503,42 @@ $("#btnj").click((e) => {
 
     **************************************************/
 
+    $.post(
+      // 1. 전송할페이지
+      "process/ins.php",
+      // 2. 전송할데이터 : {}객체로 전송
+      {
+        // 1.아이디
+        mid: $("#mid").val(),
+        // 2.비번
+        mpw: $("#mpw").val(),
+        // 3.이름
+        mnm: $("#mnm").val(),
+        // 4.성별 : 라디오태그에 value속성 필수!
+        gen: $(":radio[name=gen]:checked").val(),
+        // 5-1.이메일 앞주소
+        email1: $("#email1").val(),
+        // 5-2.이메일 뒷주소
+        seleml: $("#seleml").val(),
+        // 5-3.직접입력 이메일 뒷주소
+        email2: $("#email2").val(),
+      },
+      // 3. 전송후콜백함수
+      function (res) {
+        // res - 리턴값 받기변수
 
-      $.post(
-        // 1. 전송할페이지
-        "process/ins.php",
-        // 2. 전송할데이터 : {}객체로 전송
-        {
-          // 1.아이디
-          "mid" :$("#mid").val(),
-          // 2.비번
-          "mpw" :$("#mpw").val(),
-          // 3.이름
-          "mnm" :$("#mnm").val(),
-          // 4.성별 : 라디오태그에 value속성 필수!
-          "gen" :$(":radio[name=gen]:checked").val(),
-          // 5-1.이메일 앞주소
-          "email1" :$("#email1").val(),
-          // 5-2.이메일 뒷주소
-          "seleml" :$("#seleml").val(),
-          // 5-3.직접입력 이메일 뒷주소
-          "email2" :$("#email2").val()
-        },
-        // 3. 전송후콜백함수
-          function(res){ // res - 리턴값 받기변수
-
-            // 성공시 ////////
-            if(res==='ok'){
-              alert('회원가입을 축하드립니다!');
-              // location.replace('login.php');
-              
-            } /////////// if : 성공시 /////////
-            // 실패시
-            else{
-              alert(res);
-
-            }//////// else : 실패시 ////////
-            
-          } ///////// 전송 후 콜백함수 ////////////
-
-      ) ///////////////////// ajax post() //////////////////////////
+        // 성공시 ////////
+        if (res === "ok") {
+          alert("회원가입을 축하드립니다!");
+          // 최초 로그인 위해 로그인 페이지로!
+          location.replace('login.php');
+        } /////////// if : 성공시 /////////
+        // 실패시
+        else {
+          alert(res);
+        } //////// else : 실패시 ////////
+      } ///////// 전송 후 콜백함수 ////////////
+    ); ///////////////////// ajax post() //////////////////////////
 
     // 원래는 POST방식으로 DB에 회원가입정보를
     // 전송하여 입력후 DB처리 완료시 성공메시지나
@@ -484,9 +551,9 @@ $("#btnj").click((e) => {
     // 보이면 안되기 때문에 히스토리를 지우는
     // replace()로 이동한다!
     // location.replace('login.php');
-  }/////////// if : 통과시 ///////////
-  else{
-    alert('입력을 수정하세요!')
+  } /////////// if : 통과시 ///////////
+  else {
+    alert("입력을 수정하세요!");
   } ///////// else : 불통과시 //////////
 }); //////////// click /////////////
 

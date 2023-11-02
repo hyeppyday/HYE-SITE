@@ -32,10 +32,13 @@
  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- 공통모듈 JS -->
     <script type="module" src="./js/common.js"></script>
-    <script type="module" src="./js/linksys.js"></script>
+    <!-- 링크시스템 JS -->
+    <script src="./js/linksys.js"></script>
     <script type="module" src="./js/gallery.js"></script>
   </head>
   <body>
+  <!-- 로그인 처리 인클루드 호출 -->
+  <?php include "inc/login_session.inc" ?>
     <!-- 1.상단영역 -->
     <?php include "inc/top_area.inc" ?>
     <!-- 2.메인영역 -->
